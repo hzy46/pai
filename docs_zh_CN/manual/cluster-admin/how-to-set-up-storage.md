@@ -194,7 +194,7 @@ spec:
 
 ## <div id="assign-storage-to-pai-groups">将存储授权给用户组</div>
 
-设置好PV/PVC并检查环境后，需要将存储授权给用户。在OpenPAI中，PVC的名称被直接用作存储名称，不同存储的访问由[用户组](./如何管理用户和用户组.md)管理。要将存储分配给用户，请使用RESTful API。
+设置好PV/PVC并检查环境后，需要将存储授权给用户。在OpenPAI中，PVC的名称被直接用作存储名称，不同存储的访问由[用户组](./how-to-manage-users-and-groups.md)管理。要将存储分配给用户，请使用RESTful API。
 
 在使用API之前，您应该获取API的访问Token。 转到您的个人资料页面并复制一个Token：
 
@@ -243,7 +243,7 @@ spec:
 
 为了简化存储配置，OpenPAI提供了一个`storage-manager`，它可以帮您启动一个NFS + SAMBA服务器。 在集群内部，用户可以在任务容器里挂载该NFS存储。 在集群之外，用户可以在类Unix的系统上挂载这个NFS存储，或在Windows的文件资源管理器中访问它。
 
-请首先阅读有关[PAI服务管理和Paictl](./基础管理操作.md#pai-service-management-and-paictl) 的文档，然后启动dev box容器。在dev box容器中，通过以下方式拉取目前集群中的配置：
+请首先阅读有关[PAI服务管理和Paictl](./basic-management-operations.md#pai-service-management-and-paictl) 的文档，然后启动dev box容器。在dev box容器中，通过以下方式拉取目前集群中的配置：
 
 ```bash
 ./paictl config pull -o /cluster-configuration
@@ -365,7 +365,7 @@ mkmdir -p /mnt/data
 sudo mount -t nfs --options nfsvers=4.1 10.0.0.1:/data/ /mnt/data
 ```
 
-上述步骤仅设置了基本的SAMBA服务器。 因此，在Windows中，每个用户会使用相同的用户名和密码来访问NFS。 如果您的群集处于[AAD模式](./如何管理用户和用户组.md#users-and-groups-in-aad-mode)，并且您想要将SAMBA服务器与AAD系统集成，请参阅以下的`storage-manager`的配置：
+上述步骤仅设置了基本的SAMBA服务器。 因此，在Windows中，每个用户会使用相同的用户名和密码来访问NFS。 如果您的群集处于[AAD模式](./how-to-manage-users-and-groups.md#users-and-groups-in-aad-mode)，并且您想要将SAMBA服务器与AAD系统集成，请参阅以下的`storage-manager`的配置：
 
 ```yaml
 storage-manager:

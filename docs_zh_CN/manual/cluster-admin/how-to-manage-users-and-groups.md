@@ -2,9 +2,9 @@
 
 ## 基础认证模式下的用户和用户组
 
-在默认情况下，OpenPAI使用基础认证模式。基础认证模式中的用户组是和虚拟集群直接绑定的（关于如何设置虚拟集群，请参考[这个文档](./如何设置虚拟集群.md)）。此外，OpenPAI默认有两个用户组：`default`和`admingroup`，它们在OpenPAI部署完成时就已经创建好了。所有用户都属于`default`用户组，并且有`default`虚拟集群的访问权限。所有管理员属于`admingroup`用户组，有所有虚拟集群的访问权限。假设您创建了一个`test-vc`虚拟集群，并且管理员把这个集群授权给了某个用户。那么这个用户就会在`test-vc`用户组中了。
+在默认情况下，OpenPAI使用基础认证模式。基础认证模式中的用户组是和虚拟集群直接绑定的（关于如何设置虚拟集群，请参考[这个文档](./how-to-set-up-virtual-clusters.md)）。此外，OpenPAI默认有两个用户组：`default`和`admingroup`，它们在OpenPAI部署完成时就已经创建好了。所有用户都属于`default`用户组，并且有`default`虚拟集群的访问权限。所有管理员属于`admingroup`用户组，有所有虚拟集群的访问权限。假设您创建了一个`test-vc`虚拟集群，并且管理员把这个集群授权给了某个用户。那么这个用户就会在`test-vc`用户组中了。
 
-例如，您若在[Webportal](./基础管理操作.md#user-management)上添加了一个管理员，那么这个管理员就会在`default`和`admingroup`组中。如果添加的是非管理员，那么他一开始只会在`default`组中。假设管理员给了这个新用户（非管理员）`new-vc`的访问权限，那么他就会在`default`和`new-vc`两个组中。
+例如，您若在[Webportal](./basic-management-operations.md#user-management)上添加了一个管理员，那么这个管理员就会在`default`和`admingroup`组中。如果添加的是非管理员，那么他一开始只会在`default`组中。假设管理员给了这个新用户（非管理员）`new-vc`的访问权限，那么他就会在`default`和`new-vc`两个组中。
 
 在用户资料页，用户可以看到他所在的用户组。想要查询的话，点击页面右上角的`View my profile`。
 
@@ -67,7 +67,7 @@ openssl x509 -req -days 3650 -in $DOMAIN.csr -signkey $DOMAIN.key -out $DOMAIN.c
 
 ##### 6. 设置Pylon
 
-修改您的`services-configuration.yaml`。 如果您还不知道什么是`services-configuration.yaml`，请参考[这个文档](基础管理操作.md#pai-service-management-and-paictl)。
+修改您的`services-configuration.yaml`。 如果您还不知道什么是`services-configuration.yaml`，请参考[这个文档](basic-management-operations.md#pai-service-management-and-paictl)。
 
 ```
 pylon:

@@ -23,7 +23,7 @@ Webportal提供了一些基本的管理功能。 如果您以管理员身份登�
 
 ### <div id="user-management">用户管理</div>
 
-您可以在用户管理页面创建，修改和删除用户。 用户有两种类型：非管理员用户和管理员用户。 您可以选择要创建的类型。 仅在以基础认证模式（基础认证模式为默认的认证模式）部署OpenPAI时才显示此页面。 如果您的集群使用[AAD](./如何管理用户和用户组.md#users-and-groups-in-aad-mode) 来管理用户，则此页面将不可用。
+您可以在用户管理页面创建，修改和删除用户。 用户有两种类型：非管理员用户和管理员用户。 您可以选择要创建的类型。 仅在以基础认证模式（基础认证模式为默认的认证模式）部署OpenPAI时才显示此页面。 如果您的集群使用[AAD](./how-to-manage-users-and-groups.md#users-and-groups-in-aad-mode) 来管理用户，则此页面将不可用。
 
    <img src="./imgs/user-management.png" width="100%" height="100%" />
 
@@ -71,7 +71,7 @@ subjects:
 
 ## <div id="pai-service-management-and-paictl">PAI服务管理和Paictl</div>
 
-一般而言，PAI服务是指运行在Kubernetes上的PAI系统创建的守护程序集，部署或状态集。您可以在[k8s仪表板](#access-kubernetes-dashboard)和[服务页面](#services-page)上找到它们。例如，`webportal`是提供前端页面的PAI服务，而`rest-server`是用于后端API的另一个服务。这些服务都是可配置的。如果您遵循[安装指南](./安装指南.md)，则可以在dev box机器上的文件夹`~/pai-deploy/cluster-cfg`中找到两个文件：`layout.yaml`和`services-configuration.yaml`。这两个文件是默认的服务配置。
+一般而言，PAI服务是指运行在Kubernetes上的PAI系统创建的守护程序集，部署或状态集。您可以在[k8s仪表板](#access-kubernetes-dashboard)和[服务页面](#services-page)上找到它们。例如，`webportal`是提供前端页面的PAI服务，而`rest-server`是用于后端API的另一个服务。这些服务都是可配置的。如果您遵循[安装指南](./installation-guide.md)，则可以在dev box机器上的文件夹`~/pai-deploy/cluster-cfg`中找到两个文件：`layout.yaml`和`services-configuration.yaml`。这两个文件是默认的服务配置。
 
 `paictl`是一个CLI工具，可帮助您管理集群配置和PAI服务。要使用它，我们建议您利用我们的`dev box` Docker 镜像来避免与环境相关的问题。首先，登录`dev box`机器，通过以下方式启动`dev box`容器。
 

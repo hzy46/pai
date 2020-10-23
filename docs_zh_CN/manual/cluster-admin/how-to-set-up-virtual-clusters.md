@@ -10,7 +10,7 @@
 
 ### GPU虚拟集群的配置
 
-在 [`services-configuration.yaml`](./基础管理操作.md#pai-service-management-and-paictl) 中，有一个 hived scheduler 部分，如下：
+在 [`services-configuration.yaml`](./basic-management-operations.md#pai-service-management-and-paictl) 中，有一个 hived scheduler 部分，如下：
 
 ```yaml
 # services-configuration.yaml
@@ -45,7 +45,7 @@ hivedscheduler:
 ...
 ```
 
-如果您按照 [安装指南](./安装指南.md) 操作，您会在 [`services-configuration.yaml`](./基础管理操作.md#pai-service-management-and-paictl) 里找到类似的设置[hived scheduler 文档](https://github.com/microsoft/hivedscheduler/blob/master/doc/user-manual.md)包含这些字段的详细说明。您可以更新配置并建立虚拟集群。例如，在上面的设置中，我们有 3 个节点：`worker1`，`worker2` 和 `worker3`。它们都在 `default` 虚拟集群中。如果我们要创建两个 VC（Virtual Cluster，即虚拟集群），一个叫 `default`，包含两个节点，另一个叫 `new` ，包含一个节点，我们可以先修改 `services-configuration.yaml`：
+如果您按照 [安装指南](./installation-guide.md) 操作，您会在 [`services-configuration.yaml`](./basic-management-operations.md#pai-service-management-and-paictl) 里找到类似的设置[hived scheduler 文档](https://github.com/microsoft/hivedscheduler/blob/master/doc/user-manual.md)包含这些字段的详细说明。您可以更新配置并建立虚拟集群。例如，在上面的设置中，我们有 3 个节点：`worker1`，`worker2` 和 `worker3`。它们都在 `default` 虚拟集群中。如果我们要创建两个 VC（Virtual Cluster，即虚拟集群），一个叫 `default`，包含两个节点，另一个叫 `new` ，包含一个节点，我们可以先修改 `services-configuration.yaml`：
 
 ```yaml
 # services-configuration.yaml
@@ -151,11 +151,11 @@ hivedscheduler:
 
 ## <div id="how-to-grant-vc-to-users">将集群授权给用户</div>
 
-管理员用户有权访问所有 VC。因此，如果您设置了一个新的 VC，可以用管理员账户来测试这个新VC。对于非管理员用户，管理员应该手动向其授予 VC 访问权限。具体方法取决于集群的 [认证模式](./如何管理用户和用户组.md)。
+管理员用户有权访问所有 VC。因此，如果您设置了一个新的 VC，可以用管理员账户来测试这个新VC。对于非管理员用户，管理员应该手动向其授予 VC 访问权限。具体方法取决于集群的 [认证模式](./how-to-manage-users-and-groups.md)。
 
 ### 在基础认证模式中
 
-在基础认证模式中，管理员可以在 [`User Management` 页面](./基础管理操作.md#user-management)上授予用户访问 VC 的权限。首先，点击页面的 `Edit`。然后，为每个用户配置 VC 访问权限，如下所示。
+在基础认证模式中，管理员可以在 [`User Management` 页面](./basic-management-operations.md#user-management)上授予用户访问 VC 的权限。首先，点击页面的 `Edit`。然后，为每个用户配置 VC 访问权限，如下所示。
 
    <img src="./imgs/edit-user.png" width="100%" height="100%" />
 
@@ -165,7 +165,7 @@ hivedscheduler:
 
 在 AAD 模式下，用户通过 AAD 服务分组。应该为每个组分配 VC 访问权限。
 
-首先，在 [`services-configuration.yaml`](./基础管理操作.md#pai-service-management-and-paictl) 中找到以下部分：
+首先，在 [`services-configuration.yaml`](./basic-management-operations.md#pai-service-management-and-paictl) 中找到以下部分：
 
 ```yaml
 # services-configuration.yaml

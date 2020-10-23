@@ -42,10 +42,10 @@ dev box机器在安装、维护和卸载期间，通过SSH控制master机器和w
         - Ubuntu 16.04 (18.04应该可用，但没有经过完整测试)
         - SSH服务已开启，所有master和worker机器有同样的SSH用户名和密码，且该SSH用户有sudo权限。
         - Docker已被正确安装。您可以用命令`docker --version`来检查。如果您的Docker未被正确安装，可以参考[Docker的安装指南](https://docs.docker.com/engine/install/ubuntu/)。
-        - **GPU驱动已被正确安装。**  您可以用[这个命令](./安装常见问题解答和故障排查.md#how-to-check-whether-the-gpu-driver-is-installed)来检查。 如果您的GPU驱动未被正确安装，可以参考[如何安装GPU驱动](./安装常见问题解答和故障排查.md#how-to-install-gpu-driver)。 如果您对安装哪个版本的GPU驱动有疑问，可以阅读[这个文档](./安装常见问题解答和故障排查.md#which-version-of-nvidia-driver-should-i-install)。
+        - **GPU驱动已被正确安装。**  您可以用[这个命令](./installation-faqs-and-troubleshooting.md#how-to-check-whether-the-gpu-driver-is-installed)来检查。 如果您的GPU驱动未被正确安装，可以参考[如何安装GPU驱动](./installation-faqs-and-troubleshooting.md#how-to-install-gpu-driver)。 如果您对安装哪个版本的GPU驱动有疑问，可以阅读[这个文档](./installation-faqs-and-troubleshooting.md#which-version-of-nvidia-driver-should-i-install)。
         - **[nvidia-container-runtime](https://github.com/NVIDIA/nvidia-container-runtime)或其他device runtime已被正确安装，并且被设置为Docker的默认runtime。请在[docker-config-file](https://docs.docker.com/config/daemon/#configure-the-docker-daemon)里进行设置。**
             - 您可以用命令`sudo docker run nvidia/cuda:10.0-base nvidia-smi`来检查这一项。如果该命令成功打出当前可用的显卡个数，就说明设置是没问题的。
-            - 如果它未被正确安装，请参考[如何安装nvidia container runtime](./安装常见问题解答和故障排查.md#how-to-install-nvidia-container-runtime)。
+            - 如果它未被正确安装，请参考[如何安装nvidia container runtime](./installation-faqs-and-troubleshooting.md#how-to-install-nvidia-container-runtime)。
     - 其他要求
         - 它是OpenPAI的专用服务器。OpenPAI管理它的所有CPU、内存和GPU资源。如果有其他工作负载，则可能由于资源不足而导致未知问题。
 
@@ -53,15 +53,15 @@ dev box机器在安装、维护和卸载期间，通过SSH控制master机器和w
 
 #### 使用纯CPU worker的提示
 
-目前，在安装脚本中，我们还不支持纯CPU的worker机器。如果您同时拥有GPU worker和CPU worker，请先使用GPU worker安装PAI。成功安装之后，您可以将CPU worker附加进来，并设置一个仅含CPU的虚拟集群，相关步骤请参阅[如何添加和移除结点](./如何添加和移除结点.md)。 如果您只有CPU worker，我们还没有正式的安装支持。请在[Github](https://github.com/microsoft/pai)提交功能请求issue。
+目前，在安装脚本中，我们还不支持纯CPU的worker机器。如果您同时拥有GPU worker和CPU worker，请先使用GPU worker安装PAI。成功安装之后，您可以将CPU worker附加进来，并设置一个仅含CPU的虚拟集群，相关步骤请参阅[如何添加和移除结点](./how-to-add-and-remove-nodes.md)。 如果您只有CPU worker，我们还没有正式的安装支持。请在[Github](https://github.com/microsoft/pai)提交功能请求issue。
 
 #### 关于网络问题的提示
 
-如果您遇到网络问题，如机器无法下载某些文件，或无法连接到某个docker registry，请将提示的错误日志和kubespray合并为关键字，并搜索解决方案。您也可以参考[安装常见问题解答和故障排查](./安装常见问题解答和故障排查.md#troubleshooting)和[这个issue](https://github.com/microsoft/pai/issues/4516)。
+如果您遇到网络问题，如机器无法下载某些文件，或无法连接到某个docker registry，请将提示的错误日志和kubespray合并为关键字，并搜索解决方案。您也可以参考[安装常见问题解答和故障排查](./installation-faqs-and-troubleshooting.md#troubleshooting)和[这个issue](https://github.com/microsoft/pai/issues/4516)。
 
 ## <div id="installation-from-scratch">从头开始安装</div>
 
-除上述要求外，本安装脚本还要求**所有worker机器必须是同质的GPU服务器，即它们具有相同的硬件，例如CPU类型和编号、GPU类型和编号、内存大小等。**如果您有不同类型的worker，请在安装过程中首先只包含一种类型的worker，然后再根据[如何添加和移除结点](./如何添加和移除结点.md)添加不同类型的worker。现在，请确认您的dev box机器, master机器和worker机器.
+除上述要求外，本安装脚本还要求**所有worker机器必须是同质的GPU服务器，即它们具有相同的硬件，例如CPU类型和编号、GPU类型和编号、内存大小等。**如果您有不同类型的worker，请在安装过程中首先只包含一种类型的worker，然后再根据[如何添加和移除结点](./how-to-add-and-remove-nodes.md)添加不同类型的worker。现在，请确认您的dev box机器, master机器和worker机器.
 
 ### <div id="create-configurations">创建设置文件</div>
 
@@ -69,7 +69,7 @@ dev box机器在安装、维护和卸载期间，通过SSH控制master机器和w
 
 #### 关于中国用户的提示
 
-如果您是中国用户，在创建这些文件前，请先阅读[这个文档](./中国区设置.md)。
+如果您是中国用户，在创建这些文件前，请先阅读[这个文档](./configuration-for-china.md)。
 
 ###### `master.csv`格式
 

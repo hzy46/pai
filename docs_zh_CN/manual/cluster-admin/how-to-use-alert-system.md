@@ -33,7 +33,7 @@ OpenPAI提供了很多预先定义好的指标和报警规则。您可以访问`
 
 ### 如何添加报警规则
 
-您可以在[`services-configuration.yaml`](./基础管理操作.md#pai-service-management-and-paictl)的`prometheus`部分添加自定义的报警规则。例如，您可以添加一个`PAIJobGpuPercentLowerThan0_3For1h`的报警：
+您可以在[`services-configuration.yaml`](./basic-management-operations.md#pai-service-management-and-paictl)的`prometheus`部分添加自定义的报警规则。例如，您可以添加一个`PAIJobGpuPercentLowerThan0_3For1h`的报警：
 
 ``` yaml
 prometheus:
@@ -51,7 +51,7 @@ prometheus:
 
 当在`default`虚拟集群上的任务有一个GPU利用率低于`30%`的task，且持续时间超过`1小时`时，将会触发`PAIJobGpuPercentLowerThan0_3For1h`报警。这里我们在报警规则中使用了`task_gpu_percent`指标，这个指标描述了OpenPAI任务单个task的GPU使用率。
 
-为了使设置生效，您需要将修改后的设置上传到集群中，并重启`prometheus`服务。请在[dev box容器](./基础管理操作.md#pai-service-management-and-paictl)中遵循以下步骤：
+为了使设置生效，您需要将修改后的设置上传到集群中，并重启`prometheus`服务。请在[dev box容器](./basic-management-operations.md#pai-service-management-and-paictl)中遵循以下步骤：
 
 ```bash
 ./paictl.py service stop -n prometheus
@@ -67,7 +67,7 @@ prometheus:
 
 ### 预定义的处理措施和匹配规则
 
-在OpenPAI中，处理措施和匹配规则被实现在`alert-manager`服务中。您需要修改[`services-configuration.yaml`](./基础管理操作.md#pai-service-management-and-paictl)的`alert-manager`部分来使用它们。`alert-manager`部分的完整定义如下：
+在OpenPAI中，处理措施和匹配规则被实现在`alert-manager`服务中。您需要修改[`services-configuration.yaml`](./basic-management-operations.md#pai-service-management-and-paictl)的`alert-manager`部分来使用它们。`alert-manager`部分的完整定义如下：
 
 ```yaml
 alert-manager:
@@ -130,7 +130,7 @@ alert-manager:
 
 报警和处理措施之间的匹配关系是由`receivers`和`routes`定义的。一个`receiver`就是一组处理措施。而`route`会把报警匹配给对应的`receiver`。
 
-默认情形下，所有报警都只会触发`email-admin`（不过，如果您没有配置email信息的话，这个处理措施并不会实际生效）。您可以在[`service-configuration.yaml`](./基础管理操作.md#pai-service-management-and-paictl)中的`alert-manager`部分配置`receiver`和`route`，下面是一个示例：
+默认情形下，所有报警都只会触发`email-admin`（不过，如果您没有配置email信息的话，这个处理措施并不会实际生效）。您可以在[`service-configuration.yaml`](./basic-management-operations.md#pai-service-management-and-paictl)中的`alert-manager`部分配置`receiver`和`route`，下面是一个示例：
 
 ``` yaml
 alert-manager:
@@ -167,14 +167,14 @@ alert-manager:
 - 在`actions`字段列出所有您希望使用的处理措施
 - 如果`tag-jobs`是这个`receiver`的一个处理措施，您需要在`tags`字段中添加您希望有的tag。
 
-为了使设置生效，您需要将修改后的设置上传到集群中，并重启`alert-manager`服务。请在[dev box容器](./基础管理操作.md#pai-service-management-and-paictl)中遵循以下步骤：
+为了使设置生效，您需要将修改后的设置上传到集群中，并重启`alert-manager`服务。请在[dev box容器](./basic-management-operations.md#pai-service-management-and-paictl)中遵循以下步骤：
 
 ```bash
 ./paictl.py service stop -n alert-manager
 ./paictl.py config push -p /cluster-configuration -m service
 ./paictl.py service start -n alert-manager
 ```
-关于OpenPAI的服务管理，请参考[这个文档](./基础管理操作.md#pai-service-management-and-paictl)。
+关于OpenPAI的服务管理，请参考[这个文档](./basic-management-operations.md#pai-service-management-and-paictl)。
 
 ### 如何添加自定义的处理措施
 

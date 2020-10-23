@@ -4,7 +4,7 @@
 
 Webportal 插件提供了一种将自定义网页添加到 OpenPAI Webportal 的方法：Webportal插件。Webportal插件可以与其他 PAI 服务进行通信（例如Rest Server），并针对不同需求提供定制解决方案。
 
-作为管理员，您可以在 `services-configuration.yaml` 的 `webportal.plugins` 字段中配置 Webportal 插件（如果您不知道 `services-configuration.yaml` 是什么，请参阅[PAI 服务管理和 Paictl](./基础管理操作.md#pai-service-management-and-paictl)）：
+作为管理员，您可以在 `services-configuration.yaml` 的 `webportal.plugins` 字段中配置 Webportal 插件（如果您不知道 `services-configuration.yaml` 是什么，请参阅[PAI 服务管理和 Paictl](./basic-management-operations.md#pai-service-management-and-paictl)）：
 
 ```yaml
 webportal:

@@ -1,8 +1,8 @@
 # 升级指南
 
-本升级指南仅适用于已安装 OpenPAI >= `v1.0.0` 并希望将当前集群升级到较新版本的用户。例如，从 `v1.0.0` 升级到 `v1.1.0`。如果要将 `v1.0.0` 之前的版本升级到 >= `v1.0.0` 版本，请参考[安装指南](./安装指南.md)。
+本升级指南仅适用于已安装 OpenPAI >= `v1.0.0` 并希望将当前集群升级到较新版本的用户。例如，从 `v1.0.0` 升级到 `v1.1.0`。如果要将 `v1.0.0` 之前的版本升级到 >= `v1.0.0` 版本，请参考[安装指南](./installation-guide.md)。
 
-升级过程主要是关于修改 `services-configuration.yaml` 和使用 `paictl`。如果您不熟悉它们，请首先参考[这里](./基础管理操作.md#pai-service-management-and-paictl)来设置 `paictl` 和 `services-configuration.yaml`。
+升级过程主要是关于修改 `services-configuration.yaml` 和使用 `paictl`。如果您不熟悉它们，请首先参考[这里](./basic-management-operations.md#pai-service-management-and-paictl)来设置 `paictl` 和 `services-configuration.yaml`。
 
 ## 结束所有服务和Dev Box容器
 

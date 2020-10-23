@@ -54,7 +54,7 @@ python train_image_classifier.py --dataset_name=cifar10 --dataset_dir=/tmp/data 
 
 **步骤四：** 指定您需要的资源。在一个实例中，OpenPAI使用 **resource SKU** 来量化资源。例如，此处的 1 个 `DT` SKU 表示 1 个 GPU，5 个 CPU，和 53914MB 内存。如果您指定一个`DT` SKU，您将会得到一个包含 1 个 GPU，5 个 CPU 和 53914MB 内存的容器。如果您指定两个`DT` SKU，则会得到一个包含 2 个 GPU， 10 个 CPU 和 107828MB 内存的容器。
 
-**步骤五：** 指定docker镜像。您可以使用列出的docker镜像，也可以使用自己的镜像。这里我们选择 `TensorFlow 1.15.0 + Python 3.6 with GPU, CUDA 10.0`，这是一个预先构建的镜像。我们将在[Docker镜像和任务示例](./Docker镜像和任务示例.md)中介绍有关Docker镜像的更多信息。
+**步骤五：** 指定docker镜像。您可以使用列出的docker镜像，也可以使用自己的镜像。这里我们选择 `TensorFlow 1.15.0 + Python 3.6 with GPU, CUDA 10.0`，这是一个预先构建的镜像。我们将在[Docker镜像和任务示例](./docker-images-and-job-examples.md)中介绍有关Docker镜像的更多信息。
 
 <img src="./imgs/input-docker.png" width="90%" height="90%" />
 
@@ -70,4 +70,4 @@ python train_image_classifier.py --dataset_name=cifar10 --dataset_dir=/tmp/data 
 
 - **GPU count**, **CPU vcore count**, **Memory (MB)** 很容易理解。它们指定了相应的硬件资源，包括GPU的数量，CPU内核的数量和以MB为单位的内存量。
 
-我们将在[`如何使用高级任务设置`](./如何使用高级任务设置.md)中介绍有关任务配置的更多细节。
+我们将在[`如何使用高级任务设置`](./how-to-use-advanced-job-settings.md)中介绍有关任务配置的更多细节。

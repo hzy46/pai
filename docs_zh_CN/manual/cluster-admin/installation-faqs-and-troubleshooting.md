@@ -4,7 +4,7 @@
 
 #### 如何添加纯CPU Worker结点?
 
-目前，安装脚本中只支持GPU worker，不支持CPU worker。如果您同时拥有GPU worker和CPU worker，请先使用GPU worker安装PAI。成功安装后，您可以将CPU Worker附加到一个纯CPU的虚拟集群。详细步骤请参阅[如何添加和移除结点](./如何添加和移除结点.md)。如果您只有CPU worker，我们还没有正式的安装支持。请在Github上提交功能请求issue。
+目前，安装脚本中只支持GPU worker，不支持CPU worker。如果您同时拥有GPU worker和CPU worker，请先使用GPU worker安装PAI。成功安装后，您可以将CPU Worker附加到一个纯CPU的虚拟集群。详细步骤请参阅[如何添加和移除结点](./how-to-add-and-remove-nodes.md)。如果您只有CPU worker，我们还没有正式的安装支持。请在Github上提交功能请求issue。
 
 #### <div id="which-version-of-nvidia-driver-should-i-install">我应该安装什么版本的NVIDIA显卡驱动？</div>
 
@@ -153,7 +153,7 @@ sudo chmod 644 /etc/hosts
 
 #### 网络相关的问题
 
-如果您是中国用户，请先参考[这个文档](./中国区设置.md).
+如果您是中国用户，请先参考[这个文档](./configuration-for-china.md).
 
 **无法下载kubeadm或hyperkube二进制文件**
 

@@ -2,15 +2,15 @@
 
 ### task role和instance
 
-当我们在PAI上执行分布式程序时，我们可以为任务添加不同的`task role`。 单机器任务只有一个`task role`，而分布式任务可能有多个task role。 例如，当TensorFlow用于运行分布式作业时，它可能有两个`task role`，包括`parameter server` 和 `worker`。 在分布式作业中，每个`task role`可能具有一个或多个`instances`。假如一个TensorFlow任务中的某个`task role`有8个`instances`，那么这意味着该`task role`有8个Docker容器。具体操作请访问[这里](./如何使用高级任务设置.md#multiple-task-roles)。
+当我们在PAI上执行分布式程序时，我们可以为任务添加不同的`task role`。 单机器任务只有一个`task role`，而分布式任务可能有多个task role。 例如，当TensorFlow用于运行分布式作业时，它可能有两个`task role`，包括`parameter server` 和 `worker`。 在分布式作业中，每个`task role`可能具有一个或多个`instances`。假如一个TensorFlow任务中的某个`task role`有8个`instances`，那么这意味着该`task role`有8个Docker容器。具体操作请访问[这里](./how-to-use-advanced-job-settings.md#multiple-task-roles)。
 
 ### 使用环境变量
 
-在分布式任务中，一个task可能与其他任务通信（这里的task指的是`task role`的单个`instance`）。因此，一个任务需要知道其他任务的运行时信息，例如IP，端口等。系统将这些运行时信息作为环境变量公开给每个任务的Docker容器。用户可以在容器中编写代码以访问那些运行时环境变量，来让不同的task容器相互通信。具体的操作请访问[这里](./如何使用高级任务设置.md#environmental-variables-and-port-reservation)。
+在分布式任务中，一个task可能与其他任务通信（这里的task指的是`task role`的单个`instance`）。因此，一个任务需要知道其他任务的运行时信息，例如IP，端口等。系统将这些运行时信息作为环境变量公开给每个任务的Docker容器。用户可以在容器中编写代码以访问那些运行时环境变量，来让不同的task容器相互通信。具体的操作请访问[这里](./how-to-use-advanced-job-settings.md#environmental-variables-and-port-reservation)。
 
 ### 重试策略和完成策略
 
-如果发生未知错误，PAI将根据用户设置重试该任务。您可以在提交任务时切换到高级模式来为任务设置重试策略和完成策略。具体的操作请访问[这里](./如何使用高级任务设置.md#job-exit-spec-retry-policy-and-completion-policy) 。
+如果发生未知错误，PAI将根据用户设置重试该任务。您可以在提交任务时切换到高级模式来为任务设置重试策略和完成策略。具体的操作请访问[这里](./how-to-use-advanced-job-settings.md#job-exit-spec-retry-policy-and-completion-policy) 。
 
 ### 在OpenPAI中构建PyTorch分布式任务
 
@@ -29,7 +29,7 @@ imagenet-single-mul-DDP-gloo | ✓|  ✓| gloo|-| [imagenet-single-mul-DDP-gloo.
 
 ## DistributedDataParallel
 
-DistributedDataParallel（简称DDP）主要用于多机器的训练。DDP要求用户在PyTorch任务中设置主节点ip和端口以进行同步。对于端口，您可以简单地将一个特定端口（例如`5000`）设置为主端口。但是，此端口可能与其他端口冲突。为防止端口冲突，您可以在PAI中预留端口。具体信息请看[这里](./如何使用高级任务设置.md#environmental-variables-and-port-reservation)。预留的端口在环境变量中可用，例如`PAI_PORT_LIST_$taskRole_$taskIndex_$portLabel`，其中`$taskIndex`表示该`worker`的实例索引。例如，如果您的任务角色名称是`work`并且端口标签是`SyncPort`，则可以在PyTorch DDP程序中添加以下代码：
+DistributedDataParallel（简称DDP）主要用于多机器的训练。DDP要求用户在PyTorch任务中设置主节点ip和端口以进行同步。对于端口，您可以简单地将一个特定端口（例如`5000`）设置为主端口。但是，此端口可能与其他端口冲突。为防止端口冲突，您可以在PAI中预留端口。具体信息请看[这里](./how-to-use-advanced-job-settings.md#environmental-variables-and-port-reservation)。预留的端口在环境变量中可用，例如`PAI_PORT_LIST_$taskRole_$taskIndex_$portLabel`，其中`$taskIndex`表示该`worker`的实例索引。例如，如果您的任务角色名称是`work`并且端口标签是`SyncPort`，则可以在PyTorch DDP程序中添加以下代码：
 
 ```
 os.environ['MASTER_ADDR'] = os.environ['PAI_HOST_IP_worker_0']

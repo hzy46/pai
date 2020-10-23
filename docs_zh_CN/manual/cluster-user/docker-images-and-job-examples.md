@@ -4,7 +4,7 @@ OpenPAI使用[Docker](https://www.docker.com/why-docker)提供一致且独立的
 
 ## 预构建的Docker镜像介绍
 
-[快速开始](./快速开始.md) 教程使用一个预构建的TensorFlow镜像，`openpai/standard:python_3.6-tensorflow_1.15.0-gpu`。除此之外，OpenPAI还为不同的深度学习框架提供了许多现成的镜像。以下是镜像列表：
+[快速开始](./quick-start.md) 教程使用一个预构建的TensorFlow镜像，`openpai/standard:python_3.6-tensorflow_1.15.0-gpu`。除此之外，OpenPAI还为不同的深度学习框架提供了许多现成的镜像。以下是镜像列表：
 
 |       镜像      |                标签               | CUDA 版本 | 所需驱动版本 |
 |:----------------:|:--------------------------------:|:------------:|:-----------------------:|

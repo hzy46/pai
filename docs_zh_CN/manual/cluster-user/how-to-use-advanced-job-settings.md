@@ -2,7 +2,7 @@
 
 ## 参数和秘密参数
 
-我们通常会使用不同参数的训练不同的模型。OpenPAI支持参数定义，它提供了一种灵活的方式来训练和比较模型。您可以在 `Parameters` 部分定义参数，并在命令中使用 `<% $parameters.paramKey %>` 来引用它们。例如，下图展示了如何使用 `stepNum` 参数定义 [Hello World](./快速开始.md) 任务。
+我们通常会使用不同参数的训练不同的模型。OpenPAI支持参数定义，它提供了一种灵活的方式来训练和比较模型。您可以在 `Parameters` 部分定义参数，并在命令中使用 `<% $parameters.paramKey %>` 来引用它们。例如，下图展示了如何使用 `stepNum` 参数定义 [Hello World](./quick-start.md) 任务。
 
    <img src="./imgs/use-parameters.png" width="100%" height="100%" />
 

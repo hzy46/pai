@@ -68,13 +68,13 @@ pai_node_count{disk_pressure="false",instance="10.0.0.1:9101",job="pai_serivce_e
  1. 显卡驱动安装正确。如果是Nvidia卡的话，使用`nvidia-smi`来检查。
  2. [nvidia-container-runtime](https://github.com/NVIDIA/nvidia-container-runtime)已经被正确安装，并且被设置为Docker的默认runtime。您可以用`docker info -f "{{json .DefaultRuntime}}"`来检查。
 
-如果是在Webportal中显示的GPU数目有出入，请参考[这个文档](./如何设置虚拟集群.md)对集群重新进行配置。
+如果是在Webportal中显示的GPU数目有出入，请参考[这个文档](./how-to-set-up-virtual-clusters.md)对集群重新进行配置。
 
 ### 使用监测信息无法显示
 
 如果您没法看到一些使用状况的监测信息（例如：GPU利用率、CPU利用率、网络占用），请检查如下服务是否在正确运行： `prometheus`、 `grafana`、 `job-exporter` 和 `node-exporter`。
 
-详细来说，您可以登录[dev box container](./基础管理操作.md#pai-service-management-and-paictl)，使用命令`kubectl get pod`。您可以用命令`kubectl logs <pod-name>`看到不同pod的日志。当您解决了对应问题后，您可以[重启整个集群](./基础管理操作.md#pai-service-management-and-paictl)。
+详细来说，您可以登录[dev box container](./basic-management-operations.md#pai-service-management-and-paictl)，使用命令`kubectl get pod`。您可以用命令`kubectl logs <pod-name>`看到不同pod的日志。当您解决了对应问题后，您可以[重启整个集群](./basic-management-operations.md#pai-service-management-and-paictl)。
 
 ### Worker结点在被重新分配后无法自动回到Kubernetes系统
 
@@ -82,7 +82,7 @@ pai_node_count{disk_pressure="false",instance="10.0.0.1:9101",job="pai_serivce_e
  
 但是，有些云服务商不仅仅取消分配结点，还把结点磁盘中的内容全部删除。此时，结点将无法自动回到Kubernetes系统中。我们推荐您在dev box机器上，为这种状况设置一个cron job，定期地把丢失的结点重新加到系统中。
 
-在文档[如何添加和移除结点](如何添加和移除结点.md)中，我们已经描述了如何添加结点。在这里，cron job并不需要做添加结点的所有事，它只需要把node重新假如Kubernetes就可以了。 它可以找到所有在Kubernetes中显示`NotReady`的结点，然后使用下面的命令尝试将他们找回来： 
+在文档[如何添加和移除结点](how-to-add-and-remove-nodes.md)中，我们已经描述了如何添加结点。在这里，cron job并不需要做添加结点的所有事，它只需要把node重新假如Kubernetes就可以了。 它可以找到所有在Kubernetes中显示`NotReady`的结点，然后使用下面的命令尝试将他们找回来： 
 
 ```bash
 ansible-playbook -i inventory/mycluster/hosts.yml upgrade-cluster.yml --become --become-user=root  --limit=${limit_list} -e "@inventory/mycluster/openpai.yml"
@@ -94,7 +94,7 @@ ansible-playbook -i inventory/mycluster/hosts.yml upgrade-cluster.yml --become -
 
 目前，OpenPAI使用[internal storage](https://github.com/microsoft/pai/tree/master/src/internal-storage)来存储数据库。Internal storage使用Linux loop device来提供一个有严格大小限制的存储。默认的限制是30 GB (或者，在OpenPAI <= `v1.1.0`时，为10GB)。这些空间大概可以保存1,000,000个任务。如果您想要更大的空间，可以follow下面的步骤：
 
-第一步. [登录进一个dev box container](./基础管理操作.md#pai-service-management-and-paictl)
+第一步. [登录进一个dev box container](./basic-management-operations.md#pai-service-management-and-paictl)
 
 第二步. 在dev box container内，结束所有PAI服务： `./paictl.py service stop`.
 

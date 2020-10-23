@@ -8,7 +8,7 @@ OpenPAI 的卸载是不可逆的：所有数据将被删除，无法找回。如
 ./paictl.py service delete
 ```
 
-现在所有的 PAI 服务和数据都将被删除。如果想要删除 Kubernetes，请进入[`~/pai-deploy/kubespray` 文件夹](安装指南.md#keep-a-folder)，运行：
+现在所有的 PAI 服务和数据都将被删除。如果想要删除 Kubernetes，请进入[`~/pai-deploy/kubespray` 文件夹](installation-guide.md#keep-a-folder)，运行：
 
 ```bash
 ansible-playbook -i inventory/pai/hosts.yml reset.yml --become --become-user=root -e "@inventory/pai/openpai.yml"

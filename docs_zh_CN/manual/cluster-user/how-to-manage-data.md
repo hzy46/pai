@@ -76,7 +76,7 @@ sudo mount -t nfs4 NFS_SERVER:/NFS_PATH MOUNT_PATH
 
 ### 通过任务配置
 
-您也可以在[任务配置文件](./如何使用高级任务设置.md#job-protocol-export-and-import-jobs)中的`extras.storages`部分中指定存储名称，以下为相应部分：
+您也可以在[任务配置文件](./how-to-use-advanced-job-settings.md#job-protocol-export-and-import-jobs)中的`extras.storages`部分中指定存储名称，以下为相应部分：
 
 ```yaml
 extras:
