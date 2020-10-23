@@ -1,34 +1,35 @@
 nav:
-  - 首页: index_zh_CN.md
+  - 首页: index.md
   - 用户手册:
-      - 简介: manual_zh_CN/cluster-user/README.md
-      - 快速开始: manual_zh_CN/cluster-user/快速开始.md
-      - Docker镜像和任务示例: manual_zh_CN/cluster-user/Docker镜像和任务示例.md
-      - 如何使用数据: manual_zh_CN/cluster-user/如何使用数据.md
-      - 如何调试任务: manual_zh_CN/cluster-user/如何调试任务.md
-      - 如何使用高级任务设置: manual_zh_CN/cluster-user/如何使用高级任务设置.md
-      - 如何构建分布式任务: manual_zh_CN/cluster-user/如何构建分布式任务.md
-      - 使用Marketplace: manual_zh_CN/cluster-user/使用Marketplace.md
-      - 使用VSCode扩展: manual_zh_CN/cluster-user/使用VSCode扩展.md
-      - 使用Jupyter-Notebook扩展: manual_zh_CN/cluster-user/使用Jupyter-Notebook扩展.md
-      - 常见问题解答: manual_zh_CN/cluster-user/常见问题解答.md
+      - 简介: manual/cluster-user/README.md
+      - 快速开始: manual/cluster-user/快速开始.md
+      - Docker镜像和任务示例: manual/cluster-user/Docker镜像和任务示例.md
+      - 如何使用数据: manual/cluster-user/如何使用数据.md
+      - 如何调试任务: manual/cluster-user/如何调试任务.md
+      - 如何使用高级任务设置: manual/cluster-user/如何使用高级任务设置.md
+      - 如何构建分布式任务: manual/cluster-user/如何构建分布式任务.md
+      - 使用Marketplace: manual/cluster-user/使用Marketplace.md
+      - 使用VSCode扩展: manual/cluster-user/使用VSCode扩展.md
+      - 使用Jupyter-Notebook扩展: manual/cluster-user/使用Jupyter-Notebook扩展.md
+      - 常见问题解答: manual/cluster-user/常见问题解答.md
   - 管理员手册:
-      - 简介: manual_zh_CN/cluster-admin/README.md
-      - 安装指南: manual_zh_CN/cluster-admin/安装指南.md
-      - 安装常见问题解答和故障排查: manual_zh_CN/cluster-admin/安装常见问题解答和故障排查.md
-      - 基础管理操作: manual_zh_CN/cluster-admin/基础管理操作.md
-      - 如何管理用户和用户组: manual_zh_CN/cluster-admin/如何管理用户和用户组.md
-      - 如何设置数据存储: manual_zh_CN/cluster-admin/如何设置数据存储.md
-      - 如何设置虚拟集群: manual_zh_CN/cluster-admin/如何设置虚拟集群.md
-      - 如何添加和移除结点: manual_zh_CN/cluster-admin/如何添加和移除结点.md
-      - 如何使用插件定制集群: manual_zh_CN/cluster-admin/如何使用插件定制集群.md
-      - 如何使用报警系统: manual_zh_CN/cluster-admin/如何使用报警系统.md
-      - 故障排查: manual_zh_CN/cluster-admin/故障排查.md
-      - 推荐实践: manual_zh_CN/cluster-admin/推荐实践.md
-      - 如何卸载OpenPAI: manual_zh_CN/cluster-admin/如何卸载openpai.md
-      - 升级指南: manual_zh_CN/cluster-admin/升级指南.md
+      - 简介: manual/cluster-admin/README.md
+      - 安装指南: manual/cluster-admin/安装指南.md
+      - 安装常见问题解答和故障排查: manual/cluster-admin/安装常见问题解答和故障排查.md
+      - 基础管理操作: manual/cluster-admin/基础管理操作.md
+      - 如何管理用户和用户组: manual/cluster-admin/如何管理用户和用户组.md
+      - 如何设置数据存储: manual/cluster-admin/如何设置数据存储.md
+      - 如何设置虚拟集群: manual/cluster-admin/如何设置虚拟集群.md
+      - 如何添加和移除结点: manual/cluster-admin/如何添加和移除结点.md
+      - 如何使用插件定制集群: manual/cluster-admin/如何使用插件定制集群.md
+      - 如何使用报警系统: manual/cluster-admin/如何使用报警系统.md
+      - 故障排查: manual/cluster-admin/故障排查.md
+      - 推荐实践: manual/cluster-admin/推荐实践.md
+      - 如何卸载OpenPAI: manual/cluster-admin/如何卸载openpai.md
+      - 升级指南: manual/cluster-admin/升级指南.md
 plugins:
   - search
 site_name: OpenPAI手册
 theme: readthedocs
 use_directory_urls: false
+docs_dir: docs_zh_CN
