@@ -39,14 +39,14 @@ OpenPAI提供了很多预先定义好的指标和报警规则。您可以访问`
 prometheus:
   customized-alerts: |
     groups:
-      - name: customized-alerts
-        rules:
-          - alert: PAIJobGpuPercentLowerThan0_3For1h
-            expr: avg(task_gpu_percent{virtual_cluster=~"default"}) by (job_name) < 0.3
-            for: 1h
-            annotations:
-              summary: "{{$labels.job_name}} has a job gpu percent lower than 30% for 1 hour"
-              description: Monitor job level gpu utilization in certain virtual clusters.
+    - name: customized-alerts
+      rules:
+        - alert: PAIJobGpuPercentLowerThan0_3For1h
+          expr: avg(task_gpu_percent{virtual_cluster=~"default"}) by (job_name) < 0.3
+          for: 1h
+          annotations:
+            summary: "{{$labels.job_name}} has a job gpu percent lower than 30% for 1 hour"
+            description: Monitor job level gpu utilization in certain virtual clusters.
 ```
 
 当在`default`虚拟集群上的任务有一个GPU利用率低于`30%`的task，且持续时间超过`1小时`时，将会触发`PAIJobGpuPercentLowerThan0_3For1h`报警。这里我们在报警规则中使用了`task_gpu_percent`指标，这个指标描述了OpenPAI任务单个task的GPU使用率。
@@ -88,22 +88,22 @@ alert-manager:
       match:
         alertname: PAIJobGpuPercentLowerThan0_3For1h
   customized-receivers:
-    - name: "pai-email-admin-user-and-stop-job"
-      actions:
-        - email-admin
-        - email-user
-        - stop-jobs
-        - tag-jobs
-      tags: 
-        - 'stopped-by-alert-manager'
+  - name: "pai-email-admin-user-and-stop-job"
+    actions:
+      - email-admin
+      - email-user
+      - stop-jobs
+      - tag-jobs
+    tags: 
+      - 'stopped-by-alert-manager'
 
 ```
 
 目前，我们提供以下预定义的处理措施：
 
   - `email-admin`: 给特定的管理员发邮件。
-  - `email-user`: 给任务的提交者发邮件。
-  - `stop-jobs`: 调用OpenPAI REST API来结束任务。
+  - `email-user`: 给任务的提交者发邮件。目前，`email-user`和`email-admin`使用的是同样的邮件模板。
+  - `stop-jobs`: 调用OpenPAI REST API来结束任务。**请注意，目前这个处理措施在结束任务后，并不会通知相应的用户。**
   - `tag-jobs`: 调用OpenPAI REST API来给任务添加tag。
   - `cordon-nodes`: 调用Kubernetes API来cordon对应的结点.
 
@@ -141,14 +141,14 @@ alert-manager:
       match:
         alertname: PAIJobGpuPercentLowerThan0_3For1h
   customized-receivers:、
-    - name: "pai-email-admin-user-and-stop-job"
-      actions:、
-        - email-admin
-        - email-user
-        - stop-jobs
-        - tag-jobs
-      tags: 
-        - 'stopped-by-alert-manager'
+  - name: "pai-email-admin-user-and-stop-job"
+    actions:、
+      - email-admin
+      - email-user
+      - stop-jobs
+      - tag-jobs
+    tags: 
+      - 'stopped-by-alert-manager'
   ......
 ```
 
