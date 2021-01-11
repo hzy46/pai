@@ -9,57 +9,134 @@ To install OpenPAI >= `v1.0.0`, please first check [Installation Requirements](#
 The deployment of OpenPAI requires you to have **at least 3 separate machines**: one dev box machine, one master machine, and one worker machine.
 
 Dev box machine controls masters and workers through SSH during installation, maintenance, and uninstallation. There should be one, and only one dev box. 
-The master machine is used to run core Kubernetes components and core OpenPAI services.
-Currently, OpenPAI does not support high availability and you can only specify one master machine.
-We recommend you use CPU-only machines for dev box and master.
-The worker machines are used to run jobs.
 
-Please check the following requirements before installation:
+The master machine is used to run core Kubernetes components and core OpenPAI services. Currently, OpenPAI does not support high availability and you can only specify one master machine. We recommend you use CPU-only machines for dev box and master.
 
-* Dev Box Machine
-    - Hardware Requirement
-        - It can communicate with all other machines (master and worker machines).
-        - It is separate from the cluster which contains master machines and worker machines.
-    - Software Requirement
-        - Ubuntu 16.04 (18.04 should work, but not fully tested)
-        - SSH service is enabled.
-        - Passwordless ssh to all other machines (master and worker machines)
-        - Docker is installed.  You may use the command `docker --version` to check it. Refer to [docker's installation guidance](https://docs.docker.com/engine/install/ubuntu/) if it is not successfully installed.
-* Master Machine
-    - Hardware Requirement
-        - At least 40GB of free memory.
-        - It has a **static IP address**, and make sure it can communicate with all other machines.
-        - It can access the internet, especially needs to have access to the docker hub registry service or its mirror. Deployment process will pull Docker images.
-    - Software Requirement
-        - Ubuntu 16.04 (18.04 should work, but not fully tested)
-        - SSH service is enabled and shares the same username/password with worker machines and have sudo privilege.
-        - NTP service is enabled, and etcd is depended on it. You can use `apt install ntp` to check this requirement.
-    - Other Requirement
-        - It is a dedicated server for OpenPAI. OpenPAI manages all CPU, memory and GPU resources of it. If there is any other workload, it may cause unknown problem due to insufficient resource.
-* Worker Machines:
-    - Hardware Requirement
-        - At least 16GB of free memory.
-        - All servers should have at least one GPU.
-        - Each server has a **static IP address**, and make sure they can communicate with all other machines. 
-        - Each server can access internet, especially needs to have access to the docker hub registry service or its mirror. Deployment process will pull Docker images.
-    - Software Requirement
-        - Ubuntu 16.04 (18.04 should work, but not fully tested)
-        - SSH service is enabled and share the same username/password and have sudo privilege.
-        - Docker is installed. You may use command `docker --version` to check it. Refer to [docker's installation guidance](https://docs.docker.com/engine/install/ubuntu/) if it is not successfully installed.
-        - **GPU driver is installed.**  You may use [a command](./installation-faqs-and-troubleshooting.md#how-to-check-whether-the-gpu-driver-is-installed) to check it. Refer to [the installation guidance](./installation-faqs-and-troubleshooting.md#how-to-install-gpu-driver) in FAQs if the driver is not successfully installed. If you are wondering which version of GPU driver you should use, please also refer to [FAQs](./installation-faqs-and-troubleshooting.md#which-version-of-nvidia-driver-should-i-install).
-        - **[nvidia-container-runtime](https://github.com/NVIDIA/nvidia-container-runtime) or other device runtime is installed. And be configured as the default runtime of docker. Please configure it in [docker-config-file](https://docs.docker.com/config/daemon/#configure-the-docker-daemon), because kubespray will overwrite systemd's env.**
-            - You may use command `sudo docker run nvidia/cuda:10.0-base nvidia-smi` to check it. This command should output information of available GPUs if it is setup properly.
-            - Refer to [the installation guidance](./installation-faqs-and-troubleshooting.md#how-to-install-nvidia-container-runtime) if the it is not successfully set up.
-    - Other Requirement
-        - Each server is dedicated for OpenPAI. OpenPAI manages all CPU, memory and GPU resources of it. If there is any other workload, it may cause unknown problem due to insufficient resource.
+The detailed requirements for dev box machine and master machine are as follows:
+
+<table>
+<thead>
+  <tr>
+    <th></th>
+    <th>Hardware Requirements</th>
+    <th>Software Requirements</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>Dev Box Machine</td>
+    <td>
+      <ul>
+        <li>It can communicate with all other machines (master and worker machines).</li> 
+        <li>It is separate from the cluster which contains master machines and worker machines.</li>
+        <li>It can access the internet, especially needs to have access to the docker hub registry service or its mirror. Deployment process will pull Docker images.</li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>Ubuntu 16.04 (18.04 should work, but not fully tested)</li>
+        <li>SSH service is enabled.</li>
+        <li>Passwordless ssh to all other machines (master and worker machines).</li>
+        <li>Docker is installed.</li>
+      </ul> 
+    </td>
+  </tr>
+  <tr>
+    <td>Master Machine</td>
+    <td>
+      <ul>
+        <li>At least 40GB of free memory.</li>
+        <li>It has a <b>static LAN IP address</b>, and make sure it can communicate with all other machines.</li>
+        <li>It can access the internet, especially needs to have access to the docker hub registry service or its mirror. Deployment process will pull Docker images.</li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>Ubuntu 16.04 (18.04 should work, but not fully tested)</li>
+        <li>SSH service is enabled. </li>
+        <li>It shares the same username/password with worker machines, and have sudo privilege.</li>
+        <li>Docker is installed.</li>
+        <li>NTP service is enabled. You can use <code>apt install ntp</code> to check it.</li>
+        <li>It is a dedicated server for OpenPAI. OpenPAI manages its all resources, including CPU, memory, GPU (or other computing devices). If there is any other workload, it may cause unknown problem due to insufficient resource.</li>
+      </ul>
+    </td>
+  </tr>
+</tbody>
+</table>
+
+The worker machines are used to run jobs. We support various types of workers: CPU worker, GPU worker, and workers with other computing device (e.g. TPU, NPU). In the same time, We also have two schedulers: the Kubernetes scheduler, and [hivedscheduler](https://github.com/microsoft/hivedscheduler). You can use multiple workers during installation.
+
+Hivedscheduler is the default one. It supports virtual cluster division, topology-aware resource guarantee and optimized gang scheduling, which are not supported in k8s scheduler. For CPU worker and NVIDIA GPU worker, both k8s scheduler and hived scheduler can be used. For other types of computing device, currently we only support the usage of k8s scheduler.
+
+Please check the following requirements for different types of worker machines:
+
+<table>
+<thead>
+  <tr>
+    <th>Worker Type</th>
+    <th>Hardware Requirements</th>
+    <th>Software Requirements</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>CPU Worker</td>
+    <td>
+      <ul>
+        <li>At least 16GB of free memory.</li>
+        <li>It has a <b>static LAN IP address</b>, and make sure it can communicate with all other machines.</li>
+        <li>It can access the internet, especially needs to have access to the docker hub registry service or its mirror. Deployment process will pull Docker images.</li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>Ubuntu 16.04 (18.04 should work, but not fully tested)</li>
+        <li>SSH service is enabled. </li>
+        <li>It shares the same username/password with all other machines, and have sudo privilege.</li>
+        <li>Docker is installed.</li>
+        <li>It is a dedicated server for OpenPAI. OpenPAI manages its all resources, including CPU, memory, GPU (or other computing devices). If there is any other workload, it may cause unknown problem due to insufficient resource.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>NVIDIA GPU Worker</td>
+    <td>The same as above.</td>
+    <td>
+      The same as <code>CPU worker</code>, and with the following additional requirements:
+      <ul>
+        <li><b>NVIDIA GPU Driver is installed.</b> You may use <a href="./installation-faqs-and-troubleshooting.md#how-to-check-whether-the-gpu-driver-is-installed">a command</a> to check it. Refer to <a href="./installation-faqs-and-troubleshooting.md#how-to-install-gpu-driver">the installation guidance</a> in FAQs if the driver is not successfully installed. If you are wondering which version of GPU driver you should use, please also refer to <a href="./installation-faqs-and-troubleshooting.md#which-version-of-nvidia-driver-should-i-install">FAQs</a>.</li>
+        <li><b><a href="https://github.com/NVIDIA/nvidia-container-runtime">nvidia-container-runtime</a>is installed. And be configured as the default runtime of docker.</b> Please configure it in <a href="https://docs.docker.com/config/daemon/#configure-the-docker-daemon">docker-config-file</a>, because systemd's env will be overwritten during installation. You can use command <code>sudo docker run nvidia/cuda:10.0-base nvidia-smi</code> to check it. This command should output information of available GPUs if it is setup properly. Refer to <a href="./installation-faqs-and-troubleshooting.md#how-to-install-nvidia-container-runtime">the installation guidance</a> if the it is not successfully set up.</li>
+      </ul>  
+    </td>
+  </tr>
+  <tr>
+    <td>Enflame DTU Worker</td>
+    <td>The same as above.</td>
+    <td>
+      The same as <code>CPU worker</code>, and with the following additional requirements:
+      <ul>
+        <li>Enflame DTU Driver is installed.</li>
+        <li>Enflame container runtime is installed. And be configured as the default runtime of docker. Please configure it in <a href="https://docs.docker.com/config/daemon/#configure-the-docker-daemon">docker-config-file</a>, because systemd's env will be overwritten during installation.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>Other Computing Device</td>
+    <td>The same as above.</td>
+    <td>
+      The same as <code>CPU worker</code>, and with the following additional requirements:
+      <ul>
+        <li>The driver of the device is installed.</li>
+        <li>The container runtime of the device is installed. And be configured as the default runtime of docker. Please configure it in <a href="https://docs.docker.com/config/daemon/#configure-the-docker-daemon">docker-config-file</a>, because systemd's env will be overwritten during installation.</li>
+        <li>You should have a deployable <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/">device plugin</a> of the computing device. After the Kubernetes is set up, you should manually deploy it in cluster. </li>
+      </ul>  
+    </td>
+  </tr>
+</tbody>
+</table>
 
 #### Tips for Network-related Issues
 If you are facing network issues such as the machine cannot download some file, or cannot connect to some docker registry, please combine the prompted error log and kubespray as a keyword, and search for solution. You can also refer to the [installation troubleshooting](./installation-faqs-and-troubleshooting.md#troubleshooting) and [this issue](https://github.com/microsoft/pai/issues/4516).
-
-#### Tips to Use CPU-only Worker
-
-Besides the requirements above, this installation script also requires that **all worker machines must be homogenous GPU servers, which have the same hardware, e.g. CPU type and number, GPU type and number, memory size.** If you have different types of workers, please first include only one type of workers during installation, then follow [How to Add and Remove Nodes](./how-to-add-and-remove-nodes.md) to add workers with different types. Currently, the support for CPU-only worker is limited in the installation script. If you have both GPU workers and CPU workers, please first set up PAI with GPU workers only. After PAI is successfully installed, you can attach CPU workers to it and set up a CPU-only virtual cluster.
-
 
 ## Installation From Scratch
 
