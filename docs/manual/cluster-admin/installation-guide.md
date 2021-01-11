@@ -10,9 +10,9 @@ The deployment of OpenPAI requires you to have **at least 3 separate machines**:
 
 Dev box machine controls masters and workers through SSH during installation, maintenance, and uninstallation. There should be one, and only one dev box. 
 
-The master machine is used to run core Kubernetes components and core OpenPAI services. Currently, OpenPAI does not support high availability and you can only specify one master machine. We recommend you use CPU-only machines for dev box and master.
+The master machine is used to run core Kubernetes components and core OpenPAI services. Currently, OpenPAI does not support high availability and you can only specify one master machine.
 
-The detailed requirements for dev box machine and master machine are as follows:
+We recommend you use CPU-only machines for dev box and master. The detailed requirements for dev box machine and master machine are as follows:
 
 <table>
 <thead>
@@ -64,7 +64,11 @@ The detailed requirements for dev box machine and master machine are as follows:
 </tbody>
 </table>
 
-The worker machines are used to run jobs. We support various types of workers: CPU worker, GPU worker, and workers with other computing device (e.g. TPU, NPU). In the same time, We also have two schedulers: the Kubernetes scheduler, and [hivedscheduler](https://github.com/microsoft/hivedscheduler). You can use multiple workers during installation.
+The worker machines are used to run jobs. You can use multiple workers during installation.
+
+We support various types of workers: CPU worker, GPU worker, and workers with other computing device (e.g. TPU, NPU). 
+
+In the same time, We also have two schedulers: the Kubernetes scheduler, and [hivedscheduler](https://github.com/microsoft/hivedscheduler).
 
 Hivedscheduler is the default one. It supports virtual cluster division, topology-aware resource guarantee and optimized gang scheduling, which are not supported in k8s scheduler. For CPU worker and NVIDIA GPU worker, both k8s scheduler and hived scheduler can be used. For other types of computing device, currently we only support the usage of k8s scheduler.
 
@@ -148,7 +152,20 @@ There mainly 3 steps to install OpenPAI from scratch:
 
 ### Prepare Configurations Files
 
-After you have decided all of the machines, please edit `layout.yaml` and a `config.yaml` file under `pai/contrib/kubespray/config` folder.
+On the dev box machine, use the following commands to clone the OpenPAI repo:
+
+```bash
+git clone https://github.com/microsoft/pai.git
+cd pai
+```
+
+Choose a version to install by checkout to a specific tag:
+
+```bash
+git checkout v1.5.0
+```
+
+Please edit `layout.yaml` and a `config.yaml` file under `<pai-code-dir>/contrib/kubespray/config` folder.
 These two files spedify the cluster layout and the customized configuration, respectively.
 The following is the format and example of these 2 files.
 
@@ -159,18 +176,28 @@ If you are a China user, before you edit these files, please refer to [here](./c
 #### `layout.yaml` format
 
 ``` yaml
+# GPU cluster example
+# This is a cluster with one master node and two worker nodes
+
 machine-sku:
   master-machine: # define a machine sku
     # the resource requirements for all the machines of this sku
-    mem: 60GB
+    # We use the same memory format as Kubernetes, e.g. Gi, Mi
+    # Reference: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory
+    mem: 60Gi
     cpu:
+      # the number of CPU vcores
       vcore: 24
   gpu-machine:
     computing-device:
+      # For `type`, please follow the same format specified in device plugin
+      # For example, `nvidia.com/gpu` is for NVIDIA GPU, `amd.com/gpu` is for AMD GPU,
+      # and `enflame.com/dtu` is for Enflame DTU.
+      # Reference: https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/
       type: nvidia.com/gpu
       model: K80
       count: 4
-    mem: 220GB
+    mem: 220Gi
     cpu:
       vcore: 24
 
@@ -192,11 +219,16 @@ machine-list:
 #### `config.yaml` example
 
 ``` yaml
-user: <your-ssh-username>
-password: <your-ssh-password>
+user: forexample
+password: forexample
 docker_image_tag: v1.5.0
 
 # Optional
+
+#######################################################################
+#                    OpenPAI Customized Settings                      #
+#######################################################################
+# enable_hived_scheduler: true
 
 #############################################
 # Ansible-playbooks' inventory hosts' vars. #
@@ -219,6 +251,12 @@ docker_image_tag: v1.5.0
 ################################################################
 # qos-switch: "false"
 
+###########################################################################################
+#                         Pre-check setting                                               #
+###########################################################################################
+# docker_check: true
+# resource_check: true
+
 ########################################################################################
 # Advanced docker configuration. If you are not familiar with them, don't change them. #
 ########################################################################################
@@ -228,14 +266,12 @@ docker_image_tag: v1.5.0
 
 ## An obvious use case is allowing insecure-registry access to self hosted registries.
 ## Can be ipaddress and domain_name.
-
 ## example define 172.19.16.11 or mirror.registry.io
 # openpai_docker_insecure_registries:
 #   - mirror.registry.io
 #   - 172.19.16.11
 
 ## Add other registry,example China registry mirror.
-
 # openpai_docker_registry_mirrors:
 #   - https://registry.docker-cn.com
 #   - https://mirror.aliyuncs.com
@@ -249,17 +285,31 @@ docker_image_tag: v1.5.0
 # kube_image_repo: "gcr.io/google-containers"
 # quay_image_repo: "quay.io"
 # docker_image_repo: "docker.io"
+# etcd_image_repo: "quay.io/coreos/etcd"
+# pod_infra_image_repo: "gcr.io/google_containers/pause-{{ image_arch }}"
 # kubeadm_download_url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubeadm_version }}/bin/linux/{{ image_arch }}/kubeadm"
 # hyperkube_download_url: "https://storage.googleapis.com/kubernetes-release/release/{{ kube_version }}/bin/linux/{{ image_arch }}/hyperkube"
 
 # openpai_kube_network_plugin: calico
+
+# openpai_kubespray_extra_var:
+#   kay: value
+#   key: value
+
+#######################################################################
+#                     host daemon port setting                        #
+#######################################################################
+# host_daemon_port_start: 40000
+# host_daemon_port_end: 65535
 ```
 
 The `user` and `password` is the SSH username and password from dev box machine to master machines and worker machines, you should make sure all masters and workers share the same SSH username and password. As for optional configurations, customize them if you know exactly what they are.
 
 **For Azure Users**: If you are deploying OpenPAI in Azure, please uncomment `openpai_kube_network_plugin: calico` in the config file above, and change it to `openpai_kube_network_plugin: weave`. It is because Azure doesn't support calico. See [here](https://docs.projectcalico.org/reference/public-cloud/azure#why-doesnt-azure-support-calico-networking) for details.
 
-**If qos-switch is enabled**: OpenPAI daemons will request addition resources in each node. Please check following table and reserve sufficient resources for OpenPAI daemons.
+**For those who use workers other than CPU workers and NVIDIA GPU workers**: Now we only support use Kubernetes scheduler (not Hivedscheduler) for device other than NVIDIA GPU and CPU. Please uncomment `# enable_hived_scheduler: true` and set it to `enable_hived_scheduler: false`.
+
+**If qos-switch is enabled**: OpenPAI daemons will request additional resources in each node. Please check following table and reserve sufficient resources for OpenPAI daemons.
 
 | Service Name  | Memory Request | CPU Request |
 | :-----------: | :------------: | :---------: |
@@ -269,19 +319,37 @@ The `user` and `password` is the SSH username and password from dev box machine 
 
 ### Start Kubernetes
 
-On the dev box machine, use the following commands to clone the OpenPAI repo:
+Go to folder `<pai-code-dir>/contrib/kubespray`:
 
 ``` bash
-git clone -b pai-1.4.y https://github.com/microsoft/pai.git # change to a different branch if you want to deploy a different version
-cd pai/contrib/kubespray
+cd <pai-code-dir>/contrib/kubespray
 ```
 
-The folder `pai/contrib/kubespray` contains installation scripts, both for kubespray and OpenPAI services.
-Please run the following script to deploy Kubernetes first:
+The folder `pai/contrib/kubespray` contains installation scripts, both for Kubernetes and OpenPAI services.
+Please run the following script to deploy Kubernetes first. As the name explains, we adopt Kubespray to install Kubernetes.
 
 ``` bash
 /bin/bash quick-start-kubespray.sh
 ```
+
+If there is any problem, please double check the environment requirements first. Here we provide a requirement checker to help you verify:
+
+``` bash
+/bin/bash requirement.sh
+```
+
+You can also refer to [FAQs](./installation-faqs-and-troubleshooting.md) or search engine for solution. After you fix the problem, re-run `/bin/bash quick-start-kubespray.sh`.
+
+The `quick-start-kubespray.sh` will output the following information if k8s is successfully installed:
+
+```
+You can run the following commands to setup kubectl on you local host:
+ansible-playbook -i ${HOME}/pai-deploy/kubespray/inventory/pai/hosts.yml set-kubectl.yml --ask-become-pass
+```
+
+By default, we don't setup `kubeconfig` or install `kubectl` client on the dev box machine, but we put the Kubernetes config file in `~/pai-deploy/kube/config`. You can use the config with any Kubernetes client to verify the installation. 
+
+Also, you can use the command `ansible-playbook -i ${HOME}/pai-deploy/kubespray/inventory/pai/hosts.yml set-kubectl.yml --ask-become-pass` to set up `kubeconfig` and `kubectl` on the dev box machine. It will copy the config to `~/.kube/config` and set up the `kubectl` client. After it is executed, you can use `kubectl` on the dev box machine directly.
 
 ### Start OpenPAI Services
 
@@ -305,13 +373,7 @@ You can go to http://<your-master-ip>, then use the default username and passwor
 
 As the message says, you can use `admin` and `admin-password` to login to the webportal, then submit a job to validate your installation.
 
-#### Tips for Checking Requirements
-
-If there is any error, please double check the environment requirements first. Here we provide a requirement checker to help you verify:
-
-``` bash
-/bin/bash requirement.sh
-```
+**For those who use workers other than CPU workers, NVIDIA GPU workers, AMD GPU workers, and Enflame DTU workers**: Please manaully deploy the device's device plugin in Kubernetes. Otherwise the Kubernetes scheduler won't work. Supported device plugins are listed [in this file](https://github.com/microsoft/pai/blob/master/src/device-plugin/deploy/start.sh.template). PRs are welcome.
 
 #### Keep a Folder
 
