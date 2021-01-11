@@ -70,7 +70,13 @@ We support various types of workers: CPU worker, GPU worker, and workers with ot
 
 In the same time, we also support two schedulers: the Kubernetes default scheduler, and [hivedscheduler](https://github.com/microsoft/hivedscheduler).
 
-Hivedscheduler is the default one for OpenPAI. It supports virtual cluster division, topology-aware resource guarantee and optimized gang scheduling, which are not supported in k8s default scheduler. For CPU worker and NVIDIA GPU worker, both k8s default scheduler and hived scheduler can be used. For other types of computing device, currently we only support the usage of k8s default scheduler.
+Hivedscheduler is the default for OpenPAI. It supports virtual cluster division, topology-aware resource guarantee and optimized gang scheduling, which are not supported in k8s default scheduler. 
+
+
+For now, the support for CPU/Nvidia GPU workers and workers with other computing device is different:
+
+  - For CPU worker and NVIDIA GPU worker, both k8s default scheduler and hived scheduler can be used. 
+  - For workers with other types of computing device (e.g. TPU, NPU), currently we only support the usage of k8s default scheduler. And you can only include workers with the same computing device in the cluster. For example, you can use TPU workers, but all workers should be TPU workers. You cannot use TPU workers together with GPU workers in one cluster.
 
 Please check the following requirements for different types of worker machines:
 
@@ -109,7 +115,7 @@ Please check the following requirements for different types of worker machines:
       The same as <code>CPU worker</code>, and with the following additional requirements:
       <ul>
         <li><b>NVIDIA GPU Driver is installed.</b> You may use <a href="./installation-faqs-and-troubleshooting.md#how-to-check-whether-the-gpu-driver-is-installed">a command</a> to check it. Refer to <a href="./installation-faqs-and-troubleshooting.md#how-to-install-gpu-driver">the installation guidance</a> in FAQs if the driver is not successfully installed. If you are wondering which version of GPU driver you should use, please also refer to <a href="./installation-faqs-and-troubleshooting.md#which-version-of-nvidia-driver-should-i-install">FAQs</a>.</li>
-        <li><b><a href="https://github.com/NVIDIA/nvidia-container-runtime">nvidia-container-runtime</a>is installed. And be configured as the default runtime of docker.</b> Please configure it in <a href="https://docs.docker.com/config/daemon/#configure-the-docker-daemon">docker-config-file</a>, because systemd's env will be overwritten during installation. You can use command <code>sudo docker run --rm nvidia/cuda:10.0-base nvidia-smi</code> to check it. This command should output information of available GPUs if it is setup properly. Refer to <a href="./installation-faqs-and-troubleshooting.md#how-to-install-nvidia-container-runtime">the installation guidance</a> if it is not successfully set up.</li>
+        <li><b><a href="https://github.com/NVIDIA/nvidia-container-runtime">nvidia-container-runtime</a> is installed. And be configured as the default runtime of docker.</b> Please configure it in <a href="https://docs.docker.com/config/daemon/#configure-the-docker-daemon">docker-config-file</a>, because systemd's env will be overwritten during installation. You can use command <code>sudo docker run --rm nvidia/cuda:10.0-base nvidia-smi</code> to check it. This command should output information of available GPUs if it is setup properly. Refer to <a href="./installation-faqs-and-troubleshooting.md#how-to-install-nvidia-container-runtime">the installation guidance</a> if it is not successfully set up.</li>
       </ul>  
     </td>
   </tr>
@@ -190,7 +196,7 @@ machine-sku:
       vcore: 24
   gpu-machine:
     computing-device:
-      # For `type`, please follow the same format specified in device plugin
+      # For `type`, please follow the same format specified in device plugin.
       # For example, `nvidia.com/gpu` is for NVIDIA GPU, `amd.com/gpu` is for AMD GPU,
       # and `enflame.com/dtu` is for Enflame DTU.
       # Reference: https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/
@@ -293,7 +299,7 @@ docker_image_tag: v1.5.0
 # openpai_kube_network_plugin: calico
 
 # openpai_kubespray_extra_var:
-#   kay: value
+#   key: value
 #   key: value
 
 #######################################################################
