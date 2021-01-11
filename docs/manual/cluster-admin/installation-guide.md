@@ -12,7 +12,7 @@ Dev box machine controls masters and workers through SSH during installation, ma
 
 The master machine is used to run core Kubernetes components and core OpenPAI services. Currently, OpenPAI does not support high availability and you can only specify one master machine.
 
-We recommend you use CPU-only machines for dev box and master. The detailed requirements for dev box machine and master machine are as follows:
+We recommend you to use CPU-only machines for dev box and master. The detailed requirements for dev box machine and master machine are as follows:
 
 <table>
 <thead>
@@ -28,7 +28,7 @@ We recommend you use CPU-only machines for dev box and master. The detailed requ
     <td>
       <ul>
         <li>It can communicate with all other machines (master and worker machines).</li> 
-        <li>It is separate from the cluster which contains master machines and worker machines.</li>
+        <li>It is separate from the cluster which contains the master machine and worker machines.</li>
         <li>It can access the internet, especially needs to have access to the docker hub registry service or its mirror. Deployment process will pull Docker images.</li>
       </ul>
     </td>
@@ -68,9 +68,9 @@ The worker machines are used to run jobs. You can use multiple workers during in
 
 We support various types of workers: CPU worker, GPU worker, and workers with other computing device (e.g. TPU, NPU). 
 
-In the same time, We also have two schedulers: the Kubernetes scheduler, and [hivedscheduler](https://github.com/microsoft/hivedscheduler).
+In the same time, we also support two schedulers: the Kubernetes default scheduler, and [hivedscheduler](https://github.com/microsoft/hivedscheduler).
 
-Hivedscheduler is the default one. It supports virtual cluster division, topology-aware resource guarantee and optimized gang scheduling, which are not supported in k8s scheduler. For CPU worker and NVIDIA GPU worker, both k8s scheduler and hived scheduler can be used. For other types of computing device, currently we only support the usage of k8s scheduler.
+Hivedscheduler is the default one for OpenPAI. It supports virtual cluster division, topology-aware resource guarantee and optimized gang scheduling, which are not supported in k8s default scheduler. For CPU worker and NVIDIA GPU worker, both k8s default scheduler and hived scheduler can be used. For other types of computing device, currently we only support the usage of k8s default scheduler.
 
 Please check the following requirements for different types of worker machines:
 
@@ -109,7 +109,7 @@ Please check the following requirements for different types of worker machines:
       The same as <code>CPU worker</code>, and with the following additional requirements:
       <ul>
         <li><b>NVIDIA GPU Driver is installed.</b> You may use <a href="./installation-faqs-and-troubleshooting.md#how-to-check-whether-the-gpu-driver-is-installed">a command</a> to check it. Refer to <a href="./installation-faqs-and-troubleshooting.md#how-to-install-gpu-driver">the installation guidance</a> in FAQs if the driver is not successfully installed. If you are wondering which version of GPU driver you should use, please also refer to <a href="./installation-faqs-and-troubleshooting.md#which-version-of-nvidia-driver-should-i-install">FAQs</a>.</li>
-        <li><b><a href="https://github.com/NVIDIA/nvidia-container-runtime">nvidia-container-runtime</a>is installed. And be configured as the default runtime of docker.</b> Please configure it in <a href="https://docs.docker.com/config/daemon/#configure-the-docker-daemon">docker-config-file</a>, because systemd's env will be overwritten during installation. You can use command <code>sudo docker run nvidia/cuda:10.0-base nvidia-smi</code> to check it. This command should output information of available GPUs if it is setup properly. Refer to <a href="./installation-faqs-and-troubleshooting.md#how-to-install-nvidia-container-runtime">the installation guidance</a> if the it is not successfully set up.</li>
+        <li><b><a href="https://github.com/NVIDIA/nvidia-container-runtime">nvidia-container-runtime</a>is installed. And be configured as the default runtime of docker.</b> Please configure it in <a href="https://docs.docker.com/config/daemon/#configure-the-docker-daemon">docker-config-file</a>, because systemd's env will be overwritten during installation. You can use command <code>sudo docker run --rm nvidia/cuda:10.0-base nvidia-smi</code> to check it. This command should output information of available GPUs if it is setup properly. Refer to <a href="./installation-faqs-and-troubleshooting.md#how-to-install-nvidia-container-runtime">the installation guidance</a> if it is not successfully set up.</li>
       </ul>  
     </td>
   </tr>
@@ -307,7 +307,7 @@ The `user` and `password` is the SSH username and password from dev box machine 
 
 **For Azure Users**: If you are deploying OpenPAI in Azure, please uncomment `openpai_kube_network_plugin: calico` in the config file above, and change it to `openpai_kube_network_plugin: weave`. It is because Azure doesn't support calico. See [here](https://docs.projectcalico.org/reference/public-cloud/azure#why-doesnt-azure-support-calico-networking) for details.
 
-**For those who use workers other than CPU workers and NVIDIA GPU workers**: Now we only support use Kubernetes scheduler (not Hivedscheduler) for device other than NVIDIA GPU and CPU. Please uncomment `# enable_hived_scheduler: true` and set it to `enable_hived_scheduler: false`.
+**For those who use workers other than CPU workers and NVIDIA GPU workers**: Now we only support use Kubernetes default scheduler (not Hivedscheduler) for device other than NVIDIA GPU and CPU. Please uncomment `# enable_hived_scheduler: true` and set it to `enable_hived_scheduler: false`.
 
 **If qos-switch is enabled**: OpenPAI daemons will request additional resources in each node. Please check following table and reserve sufficient resources for OpenPAI daemons.
 
@@ -326,7 +326,7 @@ cd <pai-code-dir>/contrib/kubespray
 ```
 
 The folder `pai/contrib/kubespray` contains installation scripts, both for Kubernetes and OpenPAI services.
-Please run the following script to deploy Kubernetes first. As the name explains, we adopt Kubespray to install Kubernetes.
+Please run the following script to deploy Kubernetes first. As the name explains, we adopt [kubespray](https://github.com/kubernetes-sigs/kubespray) to install Kubernetes.
 
 ``` bash
 /bin/bash quick-start-kubespray.sh
@@ -338,7 +338,7 @@ If there is any problem, please double check the environment requirements first.
 /bin/bash requirement.sh
 ```
 
-You can also refer to [FAQs](./installation-faqs-and-troubleshooting.md) or search engine for solution. After you fix the problem, re-run `/bin/bash quick-start-kubespray.sh`.
+You can also refer to [the installation troubleshooting](./installation-faqs-and-troubleshooting.md#troubleshooting) or search engine for solution. After you fix the problem, re-run `/bin/bash quick-start-kubespray.sh`.
 
 The `quick-start-kubespray.sh` will output the following information if k8s is successfully installed:
 
@@ -373,7 +373,7 @@ You can go to http://<your-master-ip>, then use the default username and passwor
 
 As the message says, you can use `admin` and `admin-password` to login to the webportal, then submit a job to validate your installation.
 
-**For those who use workers other than CPU workers, NVIDIA GPU workers, AMD GPU workers, and Enflame DTU workers**: Please manaully deploy the device's device plugin in Kubernetes. Otherwise the Kubernetes scheduler won't work. Supported device plugins are listed [in this file](https://github.com/microsoft/pai/blob/master/src/device-plugin/deploy/start.sh.template). PRs are welcome.
+**For those who use workers other than CPU workers, NVIDIA GPU workers, AMD GPU workers, and Enflame DTU workers**: Please manaully deploy the device's device plugin in Kubernetes. Otherwise the Kubernetes default scheduler won't work. Supported device plugins are listed [in this file](https://github.com/microsoft/pai/blob/master/src/device-plugin/deploy/start.sh.template). PRs are welcome.
 
 #### Keep a Folder
 
