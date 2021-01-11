@@ -145,9 +145,6 @@ Please check the following requirements for different types of worker machines:
 </tbody>
 </table>
 
-#### Tips for Network-related Issues
-If you are facing network issues such as the machine cannot download some file, or cannot connect to some docker registry, please combine the prompted error log and kubespray as a keyword, and search for solution. You can also refer to the [installation troubleshooting](./installation-faqs-and-troubleshooting.md#troubleshooting) and [this issue](https://github.com/microsoft/pai/issues/4516).
-
 ## Installation From Scratch
 
 There mainly 3 steps to install OpenPAI from scratch:
@@ -356,6 +353,9 @@ ansible-playbook -i ${HOME}/pai-deploy/kubespray/inventory/pai/hosts.yml set-kub
 By default, we don't setup `kubeconfig` or install `kubectl` client on the dev box machine, but we put the Kubernetes config file in `~/pai-deploy/kube/config`. You can use the config with any Kubernetes client to verify the installation. 
 
 Also, you can use the command `ansible-playbook -i ${HOME}/pai-deploy/kubespray/inventory/pai/hosts.yml set-kubectl.yml --ask-become-pass` to set up `kubeconfig` and `kubectl` on the dev box machine. It will copy the config to `~/.kube/config` and set up the `kubectl` client. After it is executed, you can use `kubectl` on the dev box machine directly.
+
+#### Tips for Network-related Issues
+If you are facing network issues such as the machine cannot download some file, or cannot connect to some docker registry, please combine the prompted error log and kubespray as a keyword, and search for solution. You can also refer to the [installation troubleshooting](./installation-faqs-and-troubleshooting.md#troubleshooting) and [this issue](https://github.com/microsoft/pai/issues/4516).
 
 ### Start OpenPAI Services
 
